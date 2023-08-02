@@ -29,15 +29,9 @@ library(remotes)
 remotes::install_github("CWFC-CCFB/QcPSPIntervals")
 ~~~
 
-To get access to the four tables of the database:
+To get access to the tables of the database:
 
 ~~~R
-QcPSP::restoreQcPSPData()
+QcPSPIntervals::restoreQcPSPIntervalsData()
 ~~~
 
-This will create four data.frame objects in the global environment:
-
-- QcMeasurementIndex
-- QcPlotIndex
-- QcTreeIndex
-- QcTreeMeasurements
