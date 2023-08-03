@@ -44,22 +44,23 @@ nonoverlappingIntervals$correctedDt <- nonoverlappingIntervals$correctedYear.y -
 nonoverlappingIntervals <- nonoverlappingIntervals[order(nonoverlappingIntervals$k.x, nonoverlappingIntervals$k.y),]
 nonoverlappingIntervals$kk <- 1:length(nonoverlappingIntervals[,1])
 
-nonoverlappingIntervalsFilename <- file.path(getwd(), "data", "QcNonoverlappingIntervals.RData")
-
 QcNonoverlappingIntervals <- nonoverlappingIntervals
 rm(nonoverlappingIntervals)
 
+nonoverlappingIntervalsFilename <- file.path(getwd(), "inst", "extdata", "QcNonoverlappingIntervals.RData")
+
 if (file.exists(nonoverlappingIntervalsFilename)) {
-  message(paste("Comparing file", nonoverlappingIntervalsFilename, "with reference version..."))
+  message(paste("Comparing file with reference version..."))
   newQcNonoverlappingIntervals <- QcNonoverlappingIntervals
-  load(file = nonoverlappingIntervalsFilename)
+  rm(QcNonoverlappingIntervals)
+  QcNonoverlappingIntervals <- readRDS(file = nonoverlappingIntervalsFilename)
   print(compareTwoDataFrame(newQcNonoverlappingIntervals, QcNonoverlappingIntervals))
   QcNonoverlappingIntervals <- newQcNonoverlappingIntervals
 } else {
   message(paste("File", nonoverlappingIntervalsFilename, "does not exist. It will be created."))
 }
 
-save(QcNonoverlappingIntervals, file = nonoverlappingIntervalsFilename, compress = "xz")
+saveRDS(QcNonoverlappingIntervals, file = nonoverlappingIntervalsFilename, compress = "xz")
 
 removeAllExcept(c("QcNonoverlappingIntervals"))
 
@@ -185,18 +186,20 @@ notAssignedYet <- treeInfo[which(!treeInfo$isRecruit & !treeInfo$isForSurv & !tr
 
 QcTreeRemeasurements <- treeInfo
 
-treeRemeasurementsFilename <- file.path(getwd(), "data", "QcTreeRemeasurements.RData")
+treeRemeasurementsFilename <- file.path(getwd(), "inst", "extdata", "QcTreeRemeasurements.Rds")
+
 if (file.exists(treeRemeasurementsFilename)) {
   message(paste("Comparing file with reference version..."))
   newQcTreeRemeasurements <- QcTreeRemeasurements
-  load(file = treeRemeasurementsFilename)
+  rm(QcTreeRemeasurements)
+  QcTreeRemeasurements <- readRDS(file = treeRemeasurementsFilename)
   print(compareTwoDataFrame(newQcTreeRemeasurements, QcTreeRemeasurements))
   QcTreeRemeasurements <- newQcTreeRemeasurements
 } else {
   message(paste("File", treeRemeasurementsFilename, "does not exist yet. It will be created."))
 }
 
-save(QcTreeRemeasurements, file = treeRemeasurementsFilename, compress = "xz")
+saveRDS(QcTreeRemeasurements, file = treeRemeasurementsFilename, compress = "xz")
 
 removeAllExcept(c("QcTreeRemeasurements"))
 
@@ -206,22 +209,24 @@ harvestedTrees <- QcTreeRemeasurements[which(QcTreeRemeasurements$isForHarv & Qc
 nbHarvestedTreesByInterval <- aggregate(dt ~ newID_PE + k.x + k.y, harvestedTrees, FUN="length") ### 5074 intervals with harvesting
 colnames(nbHarvestedTreesByInterval) <- c("newID_PE", "k.x", "k.y", "nbHarvTrees")
 
-nbHarvestedTreesFilename <- file.path(getwd(), "data", "QcNbHarvestedTreesByIntervals.RData")
 
 QcNbHarvestedTreesByIntervals <- nbHarvestedTreesByInterval
 rm(nbHarvestedTreesByInterval)
 
+nbHarvestedTreesFilename <- file.path(getwd(),"inst", "extdata", "QcNbHarvestedTreesByIntervals.Rds")
+
 if (file.exists(nbHarvestedTreesFilename)) {
   message(paste("Comparing file with reference version..."))
   newQcNbHarvestedTreesByIntervals <- QcNbHarvestedTreesByIntervals
-  load(file = nbHarvestedTreesFilename)
+  rm(QcNbHarvestedTreesByIntervals)
+  QcNbHarvestedTreesByIntervals <- readRDS(file = nbHarvestedTreesFilename)
   print(compareTwoDataFrame(newQcNbHarvestedTreesByIntervals, QcNbHarvestedTreesByIntervals))
   QcNbHarvestedTreesByIntervals <- newQcNbHarvestedTreesByIntervals
 } else {
   message(paste("File", nbHarvestedTreesFilename, "does not exist. It will be created."))
 }
 
-save(QcNbHarvestedTreesByIntervals, file = nbHarvestedTreesFilename, compress = "xz")
+saveRDS(QcNbHarvestedTreesByIntervals, file = nbHarvestedTreesFilename, compress = "xz")
 
 removeAllExcept(c("QcTreeRemeasurements"))
 
@@ -232,7 +237,7 @@ source("./compilation/utilityFunctions.R")
 
 ESSENCE <- unique(QcPSP::QcTreeMeasurements$ESSENCE) # to have all the species in the database
 
-load(file = file.path(getwd(), "data", "QcTreeRemeasurements.RData"))
+load(file = file.path(getwd(), "data", "QcTreeRemeasurements.Rds"))
 
 getFrequencies <- function(dataSet, field) {
   tmp <- dataSet[which(dataSet[,field]),]
@@ -276,19 +281,20 @@ allFrequenciesAggregatedSpecies <- allFrequenciesAggregatedSpecies[which(allFreq
 
 QcSpeciesGrouping <- allFrequencies
 
-speciesGroupingFilename <- file.path(getwd(), "data", "QcSpeciesGrouping.RData")
+speciesGroupingFilename <- file.path(getwd(), "inst", "extdata", "QcSpeciesGrouping.Rds")
 
 if (file.exists(speciesGroupingFilename)) {
-  message(paste("Comparing", speciesGroupingFilename, "with reference file."))
+  message(paste("Comparing with reference file."))
   newQcSpeciesGrouping <- QcSpeciesGrouping
-  load(file = speciesGroupingFilename)
+  rm(QcSpeciesGrouping)
+  QcSpeciesGrouping <- readRDS(file = speciesGroupingFilename)
   print(compareTwoDataFrame(newQcSpeciesGrouping, QcSpeciesGrouping))
   QcSpeciesGrouping <- newQcSpeciesGrouping
 } else {
   message(paste("File", speciesGroupingFilename, "does not exist. It will be created."))
 }
 
-save(QcSpeciesGrouping, file = speciesGroupingFilename, compress = "xz")
+saveRDS(QcSpeciesGrouping, file = speciesGroupingFilename, compress = "xz")
 
 
 

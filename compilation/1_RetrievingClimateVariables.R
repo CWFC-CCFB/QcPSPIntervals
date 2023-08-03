@@ -76,6 +76,6 @@ for (i in 1:nbPossibleIntervals) {
 }
 
 QcClimateVariables <- output
-save(QcClimateVariables, file = file.path(getwd(), "data", "QcClimateVariables.RData"), compress = "xz")
+saveRDS(QcClimateVariables, file.path(getwd(), "inst", "extdata", "QcClimateVariables.Rds"), compress="xz")
 shutdownClient()
 

@@ -2,10 +2,21 @@
 % Please edit documentation in R/QcPSPIntervals.R
 \name{restoreQcPSPIntervalsData}
 \alias{restoreQcPSPIntervalsData}
-\title{Restore Quebec PSP data by intervals in the global environment.}
+\title{Restore Quebec PSP Data by Intervals in the Global Environment.}
 \usage{
 restoreQcPSPIntervalsData()
 }
 \description{
-Restore Quebec PSP data by intervals in the global environment.
+This function call creates five data.frame objects that contain
+the tree remeasurements by nonoverlapping intervals.
+}
+\details{
+The five data.frame objects are: \cr
+\itemize{
+\item QcNbHarvestedTreesByInterval: the number of harvested trees by intervals \cr
+\item QcNonoverlappingIntervals: the non overlapping intervals \cr
+\item QcSpeciesGrouping: a suggested species grouping \cr
+\item QcTreeRemeasurements: the tree remeasurements by nonoverlapping intervals \cr
+\item QcClimateVariables: the climate variables by nonoverlapping intervals \cr
+}
 }
