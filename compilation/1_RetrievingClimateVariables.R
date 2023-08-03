@@ -3,14 +3,17 @@
 ###########################################
 
 rm(list=ls())
-#source("./DonneesPEP20200131/staticFunctions.R")
-#source("utilityFunctions.R")
 
-QcPlotIndex <- QcPSP::plotIndex
-load(file = file.path(getwd(), "data", "nonoverlappingIntervals.RData"))
+if (!require(QcPSP)) {
+  library(remotes)
+  remotes::install_github("CWFC-CCFB/QcPSP")
+}
+
+QcPlotIndex <- QcPSP::QcPlotIndex
+load(file = file.path(getwd(), "data", "QcNonoverlappingIntervals.RData"))
 
 tmp <- merge(QcPlotIndex[,c("newID_PE","latitudeDeg","longitudeDeg", "elevationM")],
-             nonoverlappingIntervals,
+             QcNonoverlappingIntervals,
              by="newID_PE")
 
 tmp <- tmp[order(tmp$year.x, tmp$year.y),]
@@ -72,7 +75,7 @@ for (i in 1:nbPossibleIntervals) {
   }
 }
 
-climateVariables20221220 <- output
-save(climateVariables20221220, file = "./ProcessedData/GrowthModel/0_Database/climateVariables20221220.RData")
-shutdownJava()
+QcClimateVariables <- output
+save(QcClimateVariables, file = file.path(getwd(), "data", "QcClimateVariables.RData"), compress = "xz")
+shutdownClient()
 

@@ -32,52 +32,66 @@
 #'
 #' @docType data
 #'
-#' @usage data(nbHarvestedTreesByInterval)
+#' @usage data(QcNbHarvestedTreesByIntervals)
 #'
 #' @keywords datasets
 #'
 #' @examples
-#' QcNbHarvestedTreesByInterval <- QcPSPIntervals::nbHarvestedTreesByInterval
-"nbHarvestedTreesByInterval"
+#' data(QcNbHarvestedTreesByIntervals)
+"QcNbHarvestedTreesByIntervals"
 
 #'
 #' A data.frame object containing the nonoverlapping intervals.
 #'
 #' @docType data
 #'
-#' @usage data(nonoverlappingIntervals)
+#' @usage data(QcNonoverlappingIntervals)
 #'
 #' @keywords datasets
 #'
 #' @examples
-#' QcNonoverlappingIntervals <- QcPSPIntervals::nonoverlappingIntervals
-"nonoverlappingIntervals"
+#' data(QcNonoverlappingIntervals)
+"QcNonoverlappingIntervals"
 
 #'
 #' A data.frame object containing the species grouping.
 #'
 #' @docType data
 #'
-#' @usage data(speciesGrouping)
+#' @usage data(QcSpeciesGrouping)
 #'
 #' @keywords datasets
 #'
 #' @examples
-#' QcSpecinesGrouping <- QcPSPIntervals::speciesGrouping
-"speciesGrouping"
+#' data(QcSpeciesGrouping)
+"QcSpeciesGrouping"
 
 #'
 #' A data.frame object containing the tree remeasurements.
 #'
 #' @docType data
 #'
-#' @usage data(treeRemeasurements)
+#' @usage data(QcTreeRemeasurements)
 #'
 #' @keywords datasets
 #'
 #' @examples
-#' QcTreeRemeasurements <- QcPSPIntervals::treeRemeasurements
-"treeRemeasurements"
+#' data(QcTreeRemeasurements)
+"QcTreeRemeasurements"
+
+#'
+#' A data.frame object containing the climate variables associated
+#' with the nonoverlapping intervals.
+#'
+#' @docType data
+#'
+#' @usage data(QcClimateVariables)
+#'
+#' @keywords datasets
+#'
+#' @examples
+#' data(QcClimateVariables)
+"QcClimateVariables"
 
 
 #'
@@ -86,8 +100,9 @@
 #' @export
 restoreQcPSPIntervalsData <- function() {
   QcPSP::restoreQcPSPData()
-  assign("QcNbHarvestedTreesByInterval", QcPSPIntervals::nbHarvestedTreesByInterval, envir = .GlobalEnv)
-  assign("QcNonoverlappingIntervals", QcPSPIntervals::nonoverlappingIntervals, envir = .GlobalEnv)
-  assign("QcSpeciesGrouping", QcPSPIntervals::speciesGrouping, envir = .GlobalEnv)
-  assign("QcTreeRemeasurements", QcPSPIntervals::treeRemeasurements, envir = .GlobalEnv)
+  assign("QcNbHarvestedTreesByInterval", QcPSPIntervals::QcNbHarvestedTreesByIntervals, envir = .GlobalEnv)
+  assign("QcNonoverlappingIntervals", QcPSPIntervals::QcNonoverlappingIntervals, envir = .GlobalEnv)
+  assign("QcSpeciesGrouping", QcPSPIntervals::QcSpeciesGrouping, envir = .GlobalEnv)
+  assign("QcTreeRemeasurements", QcPSPIntervals::QcTreeRemeasurements, envir = .GlobalEnv)
+  assign("QcClimateVariables", QcPSPIntervals::QcClimateVariables, envir = .GlobalEnv)
 }
