@@ -9,8 +9,8 @@ if (!require(QcPSP)) {
   remotes::install_github("CWFC-CCFB/QcPSP")
 }
 
-QcPlotIndex <- QcPSP::QcPlotIndex
-load(file = file.path(getwd(), "data", "QcNonoverlappingIntervals.RData"))
+QcPSP::restoreQcPSPData()
+QcNonoverlappingIntervals <- readRDS(file = file.path(getwd(), "inst", "extdata", "QcNonoverlappingIntervals.Rds"))
 
 tmp <- merge(QcPlotIndex[,c("newID_PE","latitudeDeg","longitudeDeg", "elevationM")],
              QcNonoverlappingIntervals,
