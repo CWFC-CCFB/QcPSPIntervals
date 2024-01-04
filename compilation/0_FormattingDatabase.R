@@ -47,7 +47,7 @@ nonoverlappingIntervals$kk <- 1:length(nonoverlappingIntervals[,1])
 QcNonoverlappingIntervals <- nonoverlappingIntervals
 rm(nonoverlappingIntervals)
 
-nonoverlappingIntervalsFilename <- file.path(getwd(), "inst", "extdata", "QcNonoverlappingIntervals.RData")
+nonoverlappingIntervalsFilename <- file.path(getwd(), "inst", "extdata", "QcNonoverlappingIntervals.Rds")
 
 if (file.exists(nonoverlappingIntervalsFilename)) {
   message(paste("Comparing file with reference version..."))
@@ -67,15 +67,15 @@ removeAllExcept(c("QcNonoverlappingIntervals"))
 #### Adding trees ####
 
 QcPSP::restoreQcPSPData()
-
-treeInfo1 <- merge(QcNonoverlappingIntervals,
-                   QcTreeMeasurements[,c("newID_PE","k", "j", "ETAT", "dbhCm", "hauteurM", "BAL")],
-                   by.x=c("newID_PE","k.x"), by.y = c("newID_PE", "k"), all.x = T) ## 1 470 781 obs
-treeInfo2 <- merge(QcNonoverlappingIntervals,
-                   QcTreeMeasurements[,c("newID_PE","k", "j", "ETAT", "dbhCm", "hauteurM")],
-                   by.x=c("newID_PE","k.y"), by.y = c("newID_PE", "k"), all.x = T) ## 1 650 696 obs
-treeInfo <- merge(treeInfo1, treeInfo2, by=c(colnames(QcNonoverlappingIntervals), "j"), all = T) ## 1 846 428 obs and 24 variable
-treeInfo <- merge(treeInfo, QcTreeIndex, by=c("newID_PE","j"), all.x = T)
+commonFields <- c("kk", "k.x", "k.y", "year.x", "year.y")
+treeInfo1 <- merge(QcNonoverlappingIntervals[, commonFields],
+                   QcTreeMeasurements,
+                   by.x=c("k.x"), by.y = c("k"), all.x = T) ## 1 470 781 obs
+treeInfo2 <- merge(QcNonoverlappingIntervals[, commonFields],
+                   QcTreeMeasurements[, c("j","k","ETAT","dbhCm","hauteurM")],
+                   by.x=c("k.y"), by.y = c("k"), all.x = T) ## 1 650 696 obs
+treeInfo <- merge(treeInfo1, treeInfo2, by=c(commonFields, "j"), all = T) ## 1 846 428 obs and 13 variable
+treeInfo <- merge(treeInfo, QcTreeIndex[,c("j", "minYear", "maxYear", "intruder", "IN_1410")], by=c("j"), all.x = T)
 rm(list = c("treeInfo1", "treeInfo2"))
 
 table(treeInfo$intruder, useNA = "always") ### TODO deal with the 640 empty plot remeasured when intruder is missing
@@ -187,6 +187,8 @@ notAssignedYet <- treeInfo[which(!treeInfo$isRecruit & !treeInfo$isForSurv & !tr
 QcTreeRemeasurements <- treeInfo
 
 treeRemeasurementsFilename <- file.path(getwd(), "inst", "extdata", "QcTreeRemeasurements.Rds")
+fieldsToKeep <- colnames(QcTreeRemeasurements)[!colnames(QcTreeRemeasurements) %in% c("k.x", "k.y", "year.x", "year.y", "ETAT.x", "ETAT.y", "minYear", "maxYear", "intruder", "IN_1410")]
+QcTreeRemeasurements <- QcTreeRemeasurements[, fieldsToKeep]
 
 if (file.exists(treeRemeasurementsFilename)) {
   message(paste("Comparing file with reference version..."))
@@ -206,8 +208,8 @@ removeAllExcept(c("QcTreeRemeasurements"))
 #### Recording intervals with harvesting ####
 
 harvestedTrees <- QcTreeRemeasurements[which(QcTreeRemeasurements$isForHarv & QcTreeRemeasurements$hasBeenHarvested),] ### 92 620 harvested trees
-nbHarvestedTreesByInterval <- aggregate(dt ~ newID_PE + k.x + k.y, harvestedTrees, FUN="length") ### 5074 intervals with harvesting
-colnames(nbHarvestedTreesByInterval) <- c("newID_PE", "k.x", "k.y", "nbHarvTrees")
+nbHarvestedTreesByInterval <- aggregate(j ~ kk, harvestedTrees, FUN="length") ### 5074 intervals with harvesting
+colnames(nbHarvestedTreesByInterval) <- c("kk", "nbHarvTrees")
 
 
 QcNbHarvestedTreesByIntervals <- nbHarvestedTreesByInterval
@@ -235,9 +237,11 @@ removeAllExcept(c("QcTreeRemeasurements"))
 rm(list = ls())
 source("./compilation/utilityFunctions.R")
 
-ESSENCE <- unique(QcPSP::QcTreeMeasurements$ESSENCE) # to have all the species in the database
+QcPSP::restoreQcPSPData()
+ESSENCE <- unique(QcTreeIndex$ESSENCE) # to have all the species in the database
 
-load(file = file.path(getwd(), "data", "QcTreeRemeasurements.Rds"))
+QcTreeRemeasurements <- readRDS(file = file.path(getwd(), "inst", "extdata", "QcTreeRemeasurements.Rds"))
+QcTreeRemeasurements <- merge(QcTreeIndex[,c("j", "ESSENCE")], QcTreeRemeasurements, by = "j")
 
 getFrequencies <- function(dataSet, field) {
   tmp <- dataSet[which(dataSet[,field]),]
@@ -257,8 +261,6 @@ allFrequencies <- allFrequencies[which(allFrequencies$ESSENCE != ""),]
 for (i in 1:ncol(allFrequencies)) {
   allFrequencies[which(is.na(allFrequencies[,i])),i] <- 0
 }
-
-##### RENDU ICI #####
 
 print(allFrequencies)
 allFrequencies$speciesGr <- allFrequencies$ESSENCE
