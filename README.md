@@ -31,7 +31,8 @@ remotes::install_github("CWFC-CCFB/QcPSPIntervals")
 To get access to the tables of the database:
 
 ~~~R
-QcPSPIntervals::restoreQcPSPIntervalsData()
+library(QcPSPIntervals)
+restoreQcPSPIntervalsData()
 ~~~
 
 This will create nine objects in the global environment:
