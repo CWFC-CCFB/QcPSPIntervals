@@ -187,7 +187,7 @@ notAssignedYet <- treeInfo[which(!treeInfo$isRecruit & !treeInfo$isForSurv & !tr
 QcTreeRemeasurements <- treeInfo
 
 treeRemeasurementsFilename <- file.path(getwd(), "inst", "extdata", "QcTreeRemeasurements.Rds")
-fieldsToKeep <- colnames(QcTreeRemeasurements)[!colnames(QcTreeRemeasurements) %in% c("k.x", "k.y", "year.x", "year.y", "ETAT.x", "ETAT.y", "minYear", "maxYear", "intruder", "IN_1410")]
+fieldsToKeep <- colnames(QcTreeRemeasurements)[!colnames(QcTreeRemeasurements) %in% c("k.x", "k.y", "year.x", "year.y", "ETAT.x", "ETAT.y", "minYear", "maxYear", "intruder", "IN_1410", "NIVLECTAGE", "AGE", "SOURCE_AGE")]
 QcTreeRemeasurements <- QcTreeRemeasurements[, fieldsToKeep]
 
 if (file.exists(treeRemeasurementsFilename)) {
