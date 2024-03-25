@@ -75,6 +75,10 @@ for (i in 1:nbPossibleIntervals) {
 
 QcClimateVariables <- output
 
+for (n in names(QcClimateVariables)) {
+  colnames(QcClimateVariables[[n]])[which(colnames(QcClimateVariables[[n]]) == "KeyID")] <- "kk"
+}
+
 if (nrow(QcClimateVariables$DegreeDay_Annual) != nrow(QcNonoverlappingIntervals) * 21) {
   stop("The number of rows in DegreeDay_Annual is inconsistent!")
 }
