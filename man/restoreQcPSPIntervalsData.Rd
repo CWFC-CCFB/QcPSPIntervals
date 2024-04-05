@@ -11,12 +11,11 @@ This function call creates five data.frame objects that contain
 the tree remeasurements by nonoverlapping intervals.
 }
 \details{
-The five data.frame objects are: \cr
+The four data.frame objects are: \cr
 \itemize{
 \item QcNbHarvestedTreesByInterval: the number of harvested trees by intervals \cr
 \item QcNonoverlappingIntervals: the non overlapping intervals \cr
 \item QcSpeciesGrouping: a suggested species grouping \cr
 \item QcTreeRemeasurements: the tree remeasurements by nonoverlapping intervals \cr
-\item QcClimateVariables: the climate variables by nonoverlapping intervals \cr
 }
 }

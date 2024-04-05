@@ -36,8 +36,14 @@ models <- c("DegreeDay_Annual",
             "GrowingSeason",
             "Climatic_Annual",
             "Climatic_Monthly",
-            "Climate_Mosture_Index_Annual")
-additionalParms <- list(additionalParmsDegreeDays, NULL, NULL, NULL, NULL)
+            "Climate_Mosture_Index_Annual",
+            "Climate_Moisture_Index_Monthly",
+            "VaporPressureDeficit_Monthly")
+additionalParms <- list(additionalParmsDegreeDays, NULL, NULL, NULL, NULL, NULL, NULL)
+
+# models <- c("Climate_Moisture_Index_Monthly",
+#             "VaporPressureDeficit_Monthly")
+# additionalParms <- list(NULL, NULL)
 
 #i <- 1
 output <- NULL
@@ -64,20 +70,14 @@ for (i in 1:nbPossibleIntervals) {
     if (is.null(output)) {
       output <- weather
     } else {
-      output$DegreeDay_Annual <- rbind(output$DegreeDay_Annual, weather$DegreeDay_Annual)
-      output$GrowingSeason <- rbind(output$GrowingSeason, weather$GrowingSeason)
-      output$Climatic_Annual <- rbind(output$Climatic_Annual, weather$Climatic_Annual)
-      output$Climatic_Monthly <- rbind(output$Climatic_Monthly, weather$Climatic_Monthly)
-      output$Climate_Mosture_Index_Annual <- rbind(output$Climate_Mosture_Index_Annual, weather$Climate_Mosture_Index_Annual)
+      for (name in names(output)) {
+        output[[name]] <- rbind(output[[name]], weather[[name]])
+      }
     }
   }
 }
 
 QcClimateVariables <- output
-
-for (n in names(QcClimateVariables)) {
-  colnames(QcClimateVariables[[n]])[which(colnames(QcClimateVariables[[n]]) == "KeyID")] <- "kk"
-}
 
 if (nrow(QcClimateVariables$DegreeDay_Annual) != nrow(QcNonoverlappingIntervals) * 21) {
   stop("The number of rows in DegreeDay_Annual is inconsistent!")
@@ -97,6 +97,26 @@ if (nrow(QcClimateVariables$Climatic_Monthly) != nrow(QcNonoverlappingIntervals)
 
 if (nrow(QcClimateVariables$Climate_Mosture_Index_Annual) != nrow(QcNonoverlappingIntervals) * 20) {
   stop("The number of rows in Climate_Mosture_Index_Annual is inconsistent!")
+}
+
+if (nrow(QcClimateVariables$Climate_Moisture_Index_Monthly) != nrow(QcNonoverlappingIntervals) * 21 * 12) {
+  stop("The number of rows in Climate_Moisture_Index_Monthly is inconsistent!")
+}
+
+if (nrow(QcClimateVariables$VaporPressureDeficit_Monthly) != nrow(QcNonoverlappingIntervals) * 21 * 12) {
+  stop("The number of rows in Climate_Moisture_Index_Monthly is inconsistent!")
+}
+
+for (n in names(QcClimateVariables)) {
+  dataset <- QcClimateVariables[[n]]
+  fieldsToKeep <- colnames(dataset)[which(!colnames(dataset) %in% c("Latitude", "Longitude", "Elevation", "Rep", "DataType"))]
+  dataset <- dataset[,fieldsToKeep]
+  colnames(dataset)[which(colnames(dataset) == "KeyID")] <- "kk"
+  message(paste("Saving", n, "to file..."))
+  saveRDS(dataset, file.path(getwd(), "inst", "extdata", paste0("QcClimateVariables",n,".Rds")), compress="xz")
+  rm(dataset)
+  rm(fieldsToKeep)
+  message(paste("Done."))
 }
 
 saveRDS(QcClimateVariables, file.path(getwd(), "inst", "extdata", "QcClimateVariables.Rds"), compress="xz")

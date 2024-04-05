@@ -1,9 +1,10 @@
 Package: QcPSPIntervals
 Type: Package
 Title: Clean Version of Quebec Permanent Sample Plots Data by Intervals
-Version: 2023.07.13-7
+Version: 2023.07.13-8
 Authors@R: c(
-    person("Mathieu", "Fortin", email = "mathieu.fortin.re@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6436-2727")))
+    person("Mathieu", "Fortin", email = "mathieu.fortin.re@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6436-2727")),
+    person("His Majesty the King in right of Canada", role=c("cph")))
 Description: This is a clean version of Quebec PSP database, which is freely available (see README). The tree
     measurements are reported by intervals. These data can be used to fit growth models.
 URL: https://github.com/CWFC-CCFB/QcPSPIntervals

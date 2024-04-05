@@ -37,13 +37,12 @@
 #'
 #' @details
 #'
-#' The five data.frame objects are: \cr
+#' The four data.frame objects are: \cr
 #' \itemize{
 #' \item QcNbHarvestedTreesByInterval: the number of harvested trees by intervals \cr
 #' \item QcNonoverlappingIntervals: the non overlapping intervals \cr
 #' \item QcSpeciesGrouping: a suggested species grouping \cr
 #' \item QcTreeRemeasurements: the tree remeasurements by nonoverlapping intervals \cr
-#' \item QcClimateVariables: the climate variables by nonoverlapping intervals \cr
 #' }
 #'
 #' @export
@@ -53,8 +52,44 @@ restoreQcPSPIntervalsData <- function() {
   assign("QcNonoverlappingIntervals", .loadPackageData("QcNonoverlappingIntervals"), envir = .GlobalEnv)
   assign("QcSpeciesGrouping", .loadPackageData("QcSpeciesGrouping"), envir = .GlobalEnv)
   assign("QcTreeRemeasurements", .loadPackageData("QcTreeRemeasurements"), envir = .GlobalEnv)
-  assign("QcClimateVariables", .loadPackageData("QcClimateVariables"), envir = .GlobalEnv)
 }
+
+#'
+#' Restore Climate data for Quebec PSP Data by Intervals in the Global Environment.
+#'
+#' @description This function restore a data.frame object that contains a
+#' particular set of climatic data. The getListOfClimateVariables function
+#' provides the different sets of climate variables as provided by BioSIM Web API.
+#'
+#' @param climateVarSet a set of climate variables
+#'
+#' @export
+restoreClimateDataSet <- function(climateVarSet) {
+  if (length(climateVarSet) != 1) {
+    stop("The climateVarSet argument must be a single string!")
+  }
+  if (!(climateVarSet %in% getListOfClimateVariables())) {
+    stop(paste("The climateVarSet argument", climateVarSet, "is not among the available sets of climate variables. See getListOfClimateVariables function."))
+  }
+  assign(paste0("QcClimateVariables",climateVarSet), .loadPackageData(paste0("QcClimateVariables",climateVarSet)), envir = .GlobalEnv)
+}
+
+#'
+#' Provide the Different Sets of Climate Variables.
+#'
+#' @description This function provides a vector that contains the
+#' the different sets of climate variables as provided by BioSIM Web API.
+#'
+#' @return a vector of characters
+#'
+#' @export
+getListOfClimateVariables <- function() {
+  return(c("DegreeDay_Annual", "GrowingSeason", "Climatic_Annual", "Climatic_Monthly",
+           "Climate_Mosture_Index_Annual", "Climate_Moisture_Index_Monthly", "VaporPressureDeficit_Monthly"))
+}
+
+
+
 
 
 #'
@@ -126,13 +161,10 @@ getMetaData <- function(dFrame) {
                      "A binary variable that indicates whether the observation can be used to model harvesting.",
                      "A binary variable that indicates whether the tree has been harvested during the interval.")
     return(data.frame(Field = fieldNames, Description = description))
-  } else if (objectName == "QcClimateVariables") {
-    fieldNames <- c("IMPORTANT", "KeyID", "Latitude", "Longitude", "Elevation", "Year")
+  } else if (startsWith(objectName, "QcClimateVariables")) {
+    fieldNames <- c("IMPORTANT", "kk", "Year")
     description <- c("This object is a list that contains data.frame objects produced by BioSIM Web API.",
                      "Interval identifier. Refers to variable kk in table QcNonoverlappingIntervals.",
-                     "Latitude (degrees) of the plot.",
-                     "Longitude (degrees) of the plot.",
-                     "Elevation (m) of the plot.",
                      "Date (yr) for which the climate variable is provided.")
     return(data.frame(Field = fieldNames, Description = description))
   } else {
