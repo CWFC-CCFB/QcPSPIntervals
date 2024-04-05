@@ -126,14 +126,10 @@ shutdownClient()
 
 ### TODO regenerate these plots
 
-QcClimateVariables <- readRDS(file.path(getwd(), "inst", "extdata", "QcClimateVariables.Rds"))
+prcp <- readRDS(file.path(getwd(), "inst", "extdata", "QcClimateVariablesClimatic_Annual.Rds"))
 
-prcp <- QcClimateVariables$Climatic_Annual
-prcp <- prcp[which(prcp$TotalPrcp > 2000),] ### 169 obs (81 plots) with precipitation over 2000 mm
-nrow(aggregate(KeyID ~ Latitude + Longitude, prcp, FUN="length"))
-prcp <- prcp[which(prcp$TotalPrcp > 2500),] ### 43 obs (25 plots) with precipitation over 2500 mm
-nrow(aggregate(KeyID ~ Latitude + Longitude, prcp, FUN="length"))
-prcp <- prcp[which(prcp$TotalPrcp > 3000),] ### 6 obs (4 plots) with precipitation over
-nrow(aggregate(KeyID ~ Latitude + Longitude, prcp, FUN="length"))
+prcp <- prcp[which(prcp$TotalPrcp > 2000),] ### 170 obs with precipitation over 2000 mm
+prcp <- prcp[which(prcp$TotalPrcp > 2500),] ### 45 obs with precipitation over 2500 mm
+prcp <- prcp[which(prcp$TotalPrcp > 3000),] ### 9 obs with precipitation over 3000 mm
 
 
