@@ -6,7 +6,8 @@ Authors@R: c(
     person("Mathieu", "Fortin", email = "mathieu.fortin.re@gmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-6436-2727")),
     person("His Majesty the King in right of Canada", role=c("cph")))
 Description: This is a clean version of Quebec PSP database, which is freely available (see README). The tree
-    measurements are reported by intervals. These data can be used to fit growth models.
+    measurements are reported by intervals. These data can be used to fit growth models. Climate variables are
+    also available. These were produced by BioSIM Web API.
 URL: https://github.com/CWFC-CCFB/QcPSPIntervals
 License: LGPL-3
 Depends:
