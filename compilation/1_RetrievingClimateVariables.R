@@ -41,9 +41,8 @@ models <- c("DegreeDay_Annual",
             "VaporPressureDeficit_Monthly")
 additionalParms <- list(additionalParmsDegreeDays, NULL, NULL, NULL, NULL, NULL, NULL)
 
-# models <- c("Climate_Moisture_Index_Monthly",
-#             "VaporPressureDeficit_Monthly")
-# additionalParms <- list(NULL, NULL)
+models <- c("Soil_Moisture_Index_Monthly")
+additionalParms <- list(NULL)
 
 #i <- 1
 output <- NULL
@@ -107,6 +106,10 @@ if (nrow(QcClimateVariables$VaporPressureDeficit_Monthly) != nrow(QcNonoverlappi
   stop("The number of rows in Climate_Moisture_Index_Monthly is inconsistent!")
 }
 
+if (nrow(QcClimateVariables$Soil_Moisture_Index_Monthly) != nrow(QcNonoverlappingIntervals) * 21 * 12) {
+  stop("The number of rows in Soil_Moisture_Index_Monthly is inconsistent!")
+}
+
 for (n in names(QcClimateVariables)) {
   dataset <- QcClimateVariables[[n]]
   fieldsToKeep <- colnames(dataset)[which(!colnames(dataset) %in% c("Latitude", "Longitude", "Elevation", "Rep", "DataType"))]
@@ -119,7 +122,6 @@ for (n in names(QcClimateVariables)) {
   message(paste("Done."))
 }
 
-saveRDS(QcClimateVariables, file.path(getwd(), "inst", "extdata", "QcClimateVariables.Rds"), compress="xz")
 shutdownClient()
 
 #### Plot checkup ####

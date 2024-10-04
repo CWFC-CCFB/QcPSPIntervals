@@ -85,7 +85,7 @@ restoreClimateDataSet <- function(climateVarSet) {
 #' @export
 getListOfClimateVariables <- function() {
   return(c("DegreeDay_Annual", "GrowingSeason", "Climatic_Annual", "Climatic_Monthly",
-           "Climate_Mosture_Index_Annual", "Climate_Moisture_Index_Monthly", "VaporPressureDeficit_Monthly"))
+           "Climate_Moisture_Index_Annual", "Climate_Moisture_Index_Monthly", "VaporPressureDeficit_Monthly", "Soil_Moisture_Index_Monthly"))
 }
 
 
