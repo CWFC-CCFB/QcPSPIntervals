@@ -29,7 +29,7 @@ The package can be installed using the remotes package:
 
 ~~~R
 library(remotes)
-remotes::install_github("CWFC-CCFB/QcPSPIntervals")
+install_github("CWFC-CCFB/QcPSPIntervals")
 ~~~
 
 To get access to the tables of the database:
@@ -56,6 +56,21 @@ Metadata are available for any of these objects as follows:
 ~~~R
 getMetaData(QcMeasurementIndex)
 ~~~
+
+A series of climate data is also available. The different climatic datasets can be listed as follows:
+
+~~~R
+getListOfClimateVariables()
+~~~
+
+Climatic dataset can be restored through the restoreClimateDataSet function, which takes the dataset name as argument. The function produces
+a data.frame instance in the global environment with the name QcClimateVariables*MyDataSetName*. For instance,
+
+~~~R
+restoreClimateDataSet("Climate_Moisture_Index_Annual")
+~~~
+
+will create a data.frame object with the name QcClimateVariablesClimate_Moisture_Index_Annual in the global environments.
 
 Further information on the fields and their values can be found at 
 
